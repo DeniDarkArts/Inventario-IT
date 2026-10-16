@@ -46,6 +46,36 @@ function toast(msg, tipo = 'ok') {
   setTimeout(() => t.remove(), 3500);
 }
 
+/** Texto de una BU. */
+const nombreBU = (x) => x.codigo;  // BU de ING039: el nombre es el propio código (p. ej. SYSTEMS)
+
+/** Sitio físico de un equipo: "Cliente Aero A — Getafe · Edificio B · Puesto 2.14". */
+const textoUbicacion = (e) => [e.ubicacion, e.edificio && `Edificio ${e.edificio}`, e.puesto && `Puesto ${e.puesto}`].filter(Boolean).join(' · ');
+
+/**
+ * Opciones de un <select> de ubicaciones agrupadas por tipo. Las oficinas son el Site de ING039
+ * (valor "o:<nombre>"); clientes, almacén y reparación son ubicaciones del inventario (valor "u:<id>").
+ */
+function opcionesUbicacion(items, oficinas = [], tipos = ['oficina', 'cliente', 'almacen', 'reparacion']) {
+  const NOMBRE = { oficina: 'Oficinas', cliente: 'Clientes', almacen: 'Almacén', reparacion: 'Reparación' };
+  return '<option value="">—</option>' + tipos.map((t) => {
+    const ops = t === 'oficina'
+      ? oficinas.map((o) => `<option value="o:${esc(o.nombre)}">${esc(o.nombre)}</option>`)
+      : items.filter((x) => x.tipo === t && x.activa !== 0).map((x) => `<option value="u:${x.id}">${esc(x.nombre)}</option>`);
+    return ops.length ? `<optgroup label="${NOMBRE[t]}">${ops.join('')}</optgroup>` : '';
+  }).join('');
+}
+/** Valor del <select> de ubicaciones → { ubicacion_id, oficina } para la API. */
+const leerUbicacion = (v) => ({
+  ubicacion_id: v?.startsWith('u:') ? Number(v.slice(2)) : null,
+  oficina: v?.startsWith('o:') ? v.slice(2) : null,
+});
+/** Valor del <select> que corresponde al sitio actual de un equipo (o de una persona: oficina). */
+const valorUbicacion = (e) => (e.ubicacion_id ? `u:${e.ubicacion_id}` : e.oficina ? `o:${e.oficina}` : '');
+
+/** Nombre de quien tiene el equipo, marcando si está de baja en ING039. */
+const textoAsignado = (e) => (e.asignado_a ? `${e.asignado_a}${e.asignado_baja ? ` (baja ${e.asignado_baja})` : ''}` : '—');
+
 const ETIQUETA_ROL = {
   admin_it: 'Administrador IT', tecnico_it: 'Técnico IT', lector: 'Lector', responsable: 'Responsable', empleado: 'Empleado',
 };

@@ -2,9 +2,9 @@
 
 Gestión del inventario de equipos informáticos (portátiles, PCs, monitores, docks, teclados…) de una empresa de ingeniería cuyos empleados trabajan en la oficina o en instalaciones de clientes.
 
-- Asignación de equipos por **persona, proyecto y unidad de negocio** (con equipos compartidos entre UN).
+- Asignación de equipos por **persona, proyecto y BU** (con equipos compartidos entre BU).
 - **Disponibilidad**: qué equipos están libres ahora, tras preparación o próximamente.
-- Altas y bajas de empleados con entrega y devolución firmadas.
+- Entrega y devolución de equipos firmadas. Las personas, sus BU, oficinas y bajas se leen en vivo de ING039.
 - **Masterización** interna o en el dominio del cliente.
 - **Incidencias** con fotos, sustitutos y reparación.
 - **PWA móvil** con escaneo de la pegatina QR.

@@ -2,8 +2,8 @@
 (async () => {
   const u = await nav();
   const lista = document.querySelector('#lista');
-  if (!u.empleado_id) { lista.innerHTML = '<p class="muted">Tu usuario no está vinculado a un empleado.</p>'; return; }
-  const { items } = await API.get(`/empleados/${u.empleado_id}/equipos`);
+  if (!u.empleado_id) { lista.innerHTML = '<p class="muted">Tu usuario no está vinculado a una persona de ING039.</p>'; return; }
+  const { items } = await API.get(`/personas/${u.empleado_id}/equipos`);
   lista.innerHTML = items.length ? items.map((e) => `
     <a class="card" href="/equipo.html?id=${e.id}" style="display:block;color:inherit;text-decoration:none">
       <div style="display:flex;justify-content:space-between;gap:8px">

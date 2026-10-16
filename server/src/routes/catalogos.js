@@ -3,15 +3,22 @@ const router = require('express').Router();
 const { query } = require('../db');
 const { ah, HttpError } = require('../lib/http');
 const { requireRol } = require('../middleware/auth');
+const personas = require('../lib/personas');
 
 // Lista blanca: nombre en la URL → tabla y columnas editables
 const CATALOGOS = {
-  unidades:    { tabla: 'unidades_negocio', cols: ['codigo', 'nombre', 'responsable_id', 'activa'] },
   clientes:    { tabla: 'clientes', cols: ['nombre', 'dominio_ad', 'requiere_master_cliente', 'contacto_it', 'activo'] },
   ubicaciones: { tabla: 'ubicaciones', cols: ['tipo', 'cliente_id', 'nombre', 'direccion', 'activa'] },
-  proyectos:   { tabla: 'proyectos', cols: ['codigo', 'nombre', 'cliente_id', 'un_id', 'responsable_id', 'fecha_inicio', 'fecha_fin', 'activo'] },
+  proyectos:   { tabla: 'proyectos', cols: ['codigo', 'nombre', 'cliente_id', 'bu', 'responsable_id', 'fecha_inicio', 'fecha_fin', 'activo'] },
   tipos:       { tabla: 'tipos_equipo', cols: ['nombre', 'prefijo', 'lleva_qr', 'es_accesorio'] },
   modelos:     { tabla: 'modelos', cols: ['tipo_id', 'marca', 'modelo', 'specs'] },
+  codigos:     { tabla: 'modelo_codigos', cols: ['codigo', 'modelo_id'] },
+};
+
+// Catálogos que vienen de ing039.users (solo lectura): BU y oficinas (Site)
+const DE_ING039 = {
+  unidades: async () => (await personas.bus()).map((bu) => ({ codigo: bu, nombre: bu })),
+  oficinas: async () => (await personas.oficinas()).map((nombre) => ({ nombre })),
 };
 
 function catalogo(req) {
@@ -21,6 +28,7 @@ function catalogo(req) {
 }
 
 router.get('/:tabla', ah(async (req, res) => {
+  if (DE_ING039[req.params.tabla]) return res.json({ items: await DE_ING039[req.params.tabla]() });
   const { tabla } = catalogo(req);
   res.json({ items: await query(`SELECT * FROM ${tabla} ORDER BY id`) });
 }));

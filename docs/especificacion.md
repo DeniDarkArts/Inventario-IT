@@ -11,7 +11,7 @@ El sistema responde a dos preguntas en todo momento: **dónde está cada equipo 
 - Inventario de PCs, portátiles, monitores, docks, teclados, ratones, móviles y otros periféricos.
 - Identificación por QR (pegatina que pone IT en la compra). Los teclados no llevan QR y se gestionan como accesorio o por número de serie.
 - Altas y bajas de empleados, con la asignación y devolución de sus equipos.
-- Clasificación por persona, proyecto y unidad de negocio (UN), con equipos compartidos entre varias UN.
+- Clasificación por persona, proyecto y BU (unidad de negocio), con equipos compartidos entre varias BU.
 - Ubicación: oficina propia o instalaciones de un cliente.
 - Masterización: interna (CT) o en el dominio del cliente.
 - Incidencias (teclas que fallan, pantalla, batería, etc.) con su seguimiento hasta el cierre.
@@ -39,15 +39,15 @@ El sistema responde a dos preguntas en todo momento: **dónde está cada equipo 
 
 ## Roles y permisos
 
-| Acción | Admin IT | Técnico IT | Responsable UN / proyecto | Empleado |
+| Acción | Admin IT | Técnico IT | Responsable BU / proyecto | Empleado |
 | --- | --- | --- | --- | --- |
 | Dar de alta o de baja equipos | Sí | Sí | No | No |
 | Asignar y devolver equipos | Sí | Sí | Solicita | No |
 | Registrar masterización | Sí | Sí | No | No |
 | Abrir incidencia | Sí | Sí | Sí | Sí, de sus equipos |
 | Resolver incidencia | Sí | Sí | No | No |
-| Ver equipos libres | Todos | Todos | Los de su UN | No |
-| Ver inventario | Todo | Todo | Su UN / proyecto | Solo los suyos |
+| Ver equipos libres | Todos | Todos | Los de su BU | No |
+| Ver inventario | Todo | Todo | Su BU / proyecto | Solo los suyos |
 | Alta y baja de empleados | Sí | Sí | Notifica | No |
 | Catálogos | Sí | No | No | No |
 | Firmar acta de entrega | — | — | — | Sí |
@@ -109,7 +109,7 @@ Reglas impuestas por la base de datos:
 | Libre próximamente | Asignación abierta con `fecha_fin_prevista`, o empleado en `pendiente_baja` | Planificar |
 | No disponible | `reservado`, `asignado`, `en_reparacion`, `perdido`, `baja_definitiva` | — |
 
-Equipos compartidos: un responsable ve como libres los equipos donde su UN figura en `equipo_unidades`; asignar uno de otra UN principal se permite con aviso.
+Equipos compartidos: un responsable ve como libres los equipos donde su BU figura en `equipo_unidades`; asignar uno de otra BU principal se permite con aviso.
 
 ## API REST
 
@@ -173,7 +173,7 @@ Seguridad: HTTPS, cookies `httpOnly`/`secure`/`SameSite=Lax`, bcrypt, bloqueo tr
 
 - [ ] ¿También móviles, licencias o tarjetas de acceso?
 - [ ] ¿Hay un Excel actual que importar? ¿Columnas?
-- [ ] ¿Equipos compartidos con porcentaje de coste o solo qué UN pueden usarlos?
+- [ ] ¿Equipos compartidos con porcentaje de coste o solo qué BU pueden usarlos?
 - [ ] ¿Clientes que prestan equipos propios (`propiedad = cliente`)?
 - [ ] ¿Quién comunica altas y bajas?
 - [ ] ¿Teclados uno a uno con código interno o como consumible?

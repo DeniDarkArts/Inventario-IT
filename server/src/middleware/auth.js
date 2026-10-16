@@ -30,15 +30,15 @@ function veTodo(user) {
 /**
  * Devuelve el ámbito visible del usuario para filtrar consultas:
  *  - { todo: true }                       IT o lector
- *  - { unIds: [...], proyectoIds: [...] } responsable
- *  - { empleadoId }                       empleado
+ *  - { bus: [...], proyectoIds: [...] }   responsable (BU por nombre, de ing039)
+ *  - { empleadoId }                       empleado (Id de ing039.users)
  */
 function ambito(user) {
   if (veTodo(user)) return { todo: true };
   const resp = user.roles.filter((r) => r.rol === 'responsable');
   if (resp.length) {
     return {
-      unIds: resp.map((r) => r.un_id).filter(Boolean),
+      bus: resp.map((r) => r.bu).filter(Boolean),
       proyectoIds: resp.map((r) => r.proyecto_id).filter(Boolean),
       empleadoId: user.empleado_id,
     };

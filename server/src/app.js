@@ -19,7 +19,8 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://unpkg.com'],   // html5-qrcode (respaldo del escáner)
+      scriptSrc: ["'self'", 'https://unpkg.com', "'wasm-unsafe-eval'"], // html5-qrcode (respaldo) y WASM del lector de etiquetas
+      workerSrc: ["'self'", 'blob:'],                                     // OCR (tesseract) en un worker
       imgSrc: ["'self'", 'data:', 'blob:'],
       mediaSrc: ["'self'", 'blob:'],
     },
@@ -42,7 +43,7 @@ app.use('/api', requireAuth);
 app.use('/api/equipos', require('./routes/equipos'));
 app.use('/api/asignaciones', require('./routes/asignaciones'));
 app.use('/api/disponibilidad', require('./routes/disponibilidad'));
-app.use('/api/empleados', require('./routes/empleados'));
+app.use('/api/personas', require('./routes/personas'));
 app.use('/api/incidencias', require('./routes/incidencias'));
 app.use('/api/masterizaciones', require('./routes/masterizaciones'));
 app.use('/api/catalogos', require('./routes/catalogos'));
@@ -51,6 +52,15 @@ app.use('/api', (req, res) => res.status(404).json({ error: 'Ruta no encontrada'
 
 // ---- QR: /q/CT-000123 abre la ficha en la PWA ----
 app.get('/q/:codigo', (req, res) => res.redirect(`/equipo.html?qr=${encodeURIComponent(req.params.codigo)}`));
+
+// ---- Librerías del lector de etiquetas, servidas en local (la app va en una VM de intranet) ----
+const NM = path.join(__dirname, '..', 'node_modules');
+const VENDOR = { maxAge: '30d', immutable: true };
+app.use('/vendor/zxing', express.static(path.join(NM, 'zxing-wasm/dist/iife/reader'), VENDOR));
+app.use('/vendor/zxing', express.static(path.join(NM, 'zxing-wasm/dist/reader'), VENDOR));
+app.use('/vendor/tesseract', express.static(path.join(NM, 'tesseract.js/dist'), VENDOR));
+app.use('/vendor/tesseract-core', express.static(path.join(NM, 'tesseract.js-core'), VENDOR));
+app.use('/vendor/tessdata', express.static(path.join(NM, '@tesseract.js-data/eng/4.0.0_best_int'), VENDOR));
 
 // ---- Web estática y PWA ----
 app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));

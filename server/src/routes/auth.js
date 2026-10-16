@@ -3,6 +3,7 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const { query, transaction } = require('../db');
 const ing039 = require('../lib/usuarios-ing039');
+const personas = require('../lib/personas');
 const { ah } = require('../lib/http');
 const { requireAuth } = require('../middleware/auth');
 
@@ -39,12 +40,13 @@ router.post('/login', ah(async (req, res) => {
     return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
 
-  if (ext) u = await ing039.sincronizar(ext);
   await query(
     'UPDATE usuarios SET intentos_fallidos = 0, bloqueado_hasta = NULL, ultimo_acceso = NOW() WHERE id = ?',
     [u.id]
   );
-  const roles = await query('SELECT rol, un_id, proyecto_id FROM usuario_roles WHERE usuario_id = ?', [u.id]);
+  // Cuentas de ing039: roles calculados de su Rol y BU actuales; cuentas locales: usuario_roles
+  const roles = ext ? ing039.rolesDe(ext) : await query('SELECT rol, bu, proyecto_id FROM usuario_roles WHERE usuario_id = ?', [u.id]);
+  if (ext) personas.invalidar();  // que la siguiente consulta vea los datos actuales de ing039
 
   req.session.regenerate((err) => {
     if (err) return res.status(500).json({ error: 'No se pudo iniciar la sesión' });
@@ -62,10 +64,8 @@ router.post('/logout', (req, res) => {
 
 router.get('/me', requireAuth, ah(async (req, res) => {
   const user = req.session.user;
-  const [emp] = user.empleado_id
-    ? await query('SELECT nombre, apellidos FROM empleados WHERE id = ?', [user.empleado_id])
-    : [];
-  res.json({ user: { ...user, nombre: emp ? `${emp.nombre} ${emp.apellidos}` : user.email } });
+  const p = user.empleado_id ? await personas.porId(user.empleado_id) : null;
+  res.json({ user: { ...user, nombre: p?.nombre_completo || user.email, bu: p?.bu || null, oficina: p?.oficina || null } });
 }));
 
 module.exports = router;
