@@ -18,6 +18,7 @@
   color: var(--text);
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; } /* que ningún display de clase anule el atributo hidden */
 body { margin: 0; background: var(--chrome); line-height: 1.5; min-height: 100vh; }
 
 main {
@@ -139,3 +140,53 @@ body.login { background: #202733; display: flex; align-items: center; justify-co
   button, .btn { padding: 11px 16px; }
   th, td { padding: 8px 10px; }
 }
+
+/* Lector de etiquetas (alta de equipo) */
+.campo-lector { display: flex; gap: 8px; }
+.campo-lector > select, .campo-lector > input { flex: 1; width: auto; }
+#dlg-lector { width: min(720px, 96vw); }
+.lt-vista { position: relative; }
+.lt-vista { background: #000; border-radius: 6px; overflow: hidden; }
+.lt-vista video { display: block; width: 100%; max-height: 55vh; object-fit: contain; }
+/* Sin object-fit: el tamaño en pantalla debe ser el de la imagen para que el dedo marque la zona correcta */
+.lt-vista canvas { display: block; margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: 55vh; touch-action: none; cursor: crosshair; }
+.actions label.btn { margin: 0; font-size: inherit; font-weight: 500; color: var(--text); }
+.lt-vista .frame { position: absolute; inset: 30% 10%; border: 3px solid var(--accent); border-radius: 8px; pointer-events: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; flex-direction: column; align-items: flex-start; padding: 6px 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); font-family: "IBM Plex Mono", monospace; }
+.chip small { font-family: inherit; color: var(--muted); font-size: .72rem; }
+.chip.selected { background: var(--primary); border-color: var(--primary); color: #fff; }
+.chip.selected small { color: #dfe6ee; }
+.lt-texto { background: var(--sunken); border: 1px solid var(--line); border-radius: 6px; padding: 10px; white-space: pre-wrap; font-size: .85rem; max-height: 160px; overflow: auto; }
+
+/* Tablas con ordenación y filtros estilo Excel (js/tablas.js) */
+th.ordenable { white-space: nowrap; }
+.th-celda { display: inline-flex; align-items: center; gap: 6px; }
+.th-texto { cursor: pointer; user-select: none; }
+.th-texto::after { content: "↕"; margin-left: 4px; opacity: .45; font-size: .9em; }
+th[aria-sort="ascending"] .th-texto::after { content: "▲"; opacity: 1; color: var(--accent); }
+th[aria-sort="descending"] .th-texto::after { content: "▼"; opacity: 1; color: var(--accent); }
+.th-texto:focus-visible, .filtro-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filtro-btn { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0;
+  border: 1px solid rgba(255, 255, 255, .45); border-radius: 4px; background: rgba(255, 255, 255, .12); color: #fff; cursor: pointer; }
+.filtro-btn:hover { background: rgba(255, 255, 255, .25); }
+.filtro-btn svg { width: 13px; height: 13px; }
+.filtro-btn.activo { background: var(--accent); border-color: var(--accent); color: var(--text); }
+.filtro-panel { position: absolute; z-index: 40; width: min(280px, calc(100vw - 16px)); background: var(--surface); color: var(--text);
+  border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 6px; box-shadow: 0 10px 28px rgba(10, 14, 22, .25);
+  padding: 8px; font-size: .9rem; text-transform: none; letter-spacing: 0; font-weight: 400; }
+.filtro-panel hr { border: 0; border-top: 1px solid var(--line); margin: 6px 0; }
+.fp-orden { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 7px 8px; border-radius: 4px; }
+.fp-orden:hover { background: var(--sunken); }
+.fp-buscar { width: 100%; margin: 2px 0 6px; padding: 6px 8px; }
+.fp-lista { max-height: 240px; overflow-y: auto; border: 1px solid var(--line); border-radius: 4px; padding: 4px 0; }
+.fp-item { display: flex; align-items: center; gap: 8px; margin: 0; padding: 4px 8px; font-size: .88rem; font-weight: 400; color: var(--text); cursor: pointer; }
+.fp-item:hover { background: var(--sunken); }
+.fp-todos { font-weight: 600; border-bottom: 1px solid var(--line); }
+.fp-mas { margin: 4px 8px; font-size: .8rem; }
+.fp-acciones { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.fp-acciones button { padding: 6px 12px; }
+.recuento-tabla { margin: 6px 0 0; font-size: .85rem; }
+
+/* Dos campos en una fila (edificio y puesto) */
+.dos-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }

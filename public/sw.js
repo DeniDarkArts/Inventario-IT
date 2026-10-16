@@ -1,10 +1,10 @@
 // Service worker: la interfaz se cachea para abrir rápido y sin conexión.
 // Las llamadas GET a la API usan "red primero, caché si no hay conexión";
 // las escrituras (POST/PATCH) siempre van a la red.
-const VERSION = 'inv-v3';
+const VERSION = 'inv-v9';
 const SHELL = [
   '/', '/index.html', '/login.html', '/escanear.html', '/equipo.html', '/mis-equipos.html', '/disponibilidad.html',
-  '/css/app.css', '/js/api.js', '/js/firma.js',
+  '/css/app.css', '/js/api.js', '/js/tablas.js', '/js/firma.js', '/js/lector-etiquetas.js',
   '/js/pages/inventario.js', '/js/pages/login.js', '/js/pages/escanear.js', '/js/pages/equipo.js',
   '/js/pages/mis-equipos.js', '/js/pages/disponibilidad.js',
   '/manifest.webmanifest', '/icons/icon.svg', '/icons/logo-ct.jpg',
