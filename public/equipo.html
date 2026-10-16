@@ -21,12 +21,18 @@
   <dialog id="dlg-asignar">
     <form id="f-asignar">
       <h2>Asignar equipo</h2>
-      <label for="a-empleado">Empleado</label>
-      <select id="a-empleado" required></select>
+      <label for="a-buscar">Persona <span class="muted">— nombre, email o nº de empleado (ING039)</span></label>
+      <input id="a-buscar" type="search" autocomplete="off" placeholder="Escribe al menos 2 letras">
+      <select id="a-empleado" size="5" required></select>
+      <p class="muted" id="a-persona-info"></p>
       <label for="a-proyecto">Proyecto</label>
       <select id="a-proyecto"></select>
       <label for="a-ubicacion">Ubicación</label>
       <select id="a-ubicacion"></select>
+      <div class="dos-campos">
+        <div><label for="a-edificio">Edificio <span class="muted">— opcional</span></label><input id="a-edificio" maxlength="60" autocomplete="off"></div>
+        <div><label for="a-puesto">Puesto <span class="muted">— opcional</span></label><input id="a-puesto" maxlength="40" autocomplete="off"></div>
+      </div>
       <label for="a-tipo">Tipo</label>
       <select id="a-tipo"><option value="personal">Personal</option><option value="prestamo">Préstamo</option><option value="puesto">Puesto fijo (sin persona)</option></select>
       <label for="a-fin">Fecha fin prevista (préstamos)</label>
@@ -75,18 +81,31 @@
       <h2>Alta de equipo</h2>
       <p class="muted">Código QR: <strong id="n-qr"></strong></p>
       <label for="n-tipo">Tipo</label><select id="n-tipo" required></select>
-      <label for="n-modelo">Modelo</label><select id="n-modelo"><option value="">—</option></select>
-      <label for="n-serie">Nº de serie</label><input id="n-serie">
-      <label for="n-un">Unidad de negocio principal</label><select id="n-un" required></select>
+      <label for="n-modelo">Modelo</label>
+      <div class="campo-lector"><select id="n-modelo"><option value="">—</option></select><button type="button" id="n-leer-modelo" title="Leer el modelo de la etiqueta del fabricante">Leer</button></div>
+      <div id="n-modelo-leido" class="muted" hidden></div>
+      <label for="n-serie">Nº de serie</label>
+      <div class="campo-lector"><input id="n-serie" autocomplete="off"><button type="button" id="n-leer-serie" title="Leer el código de barras del nº de serie">Leer</button></div>
+      <label for="n-producto">Código de producto (ProdID, P/N) <span class="muted">— opcional</span></label>
+      <input id="n-producto" autocomplete="off">
+      <label for="n-un">BU principal</label><select id="n-un" required></select>
       <label for="n-compra">Fecha de compra</label><input id="n-compra" type="date">
       <label for="n-garantia">Garantía hasta</label><input id="n-garantia" type="date">
       <label for="n-proveedor">Proveedor</label><input id="n-proveedor">
+      <label for="n-orden">Orden de compra <span class="muted">— opcional</span></label><input id="n-orden" maxlength="40" autocomplete="off">
+      <label for="n-ubicacion">Ubicación <span class="muted">— opcional: oficina o cliente</span></label><select id="n-ubicacion"></select>
+      <div class="dos-campos">
+        <div><label for="n-edificio">Edificio <span class="muted">— opcional</span></label><input id="n-edificio" maxlength="60" autocomplete="off"></div>
+        <div><label for="n-puesto">Puesto <span class="muted">— opcional</span></label><input id="n-puesto" maxlength="40" autocomplete="off"></div>
+      </div>
       <div class="actions"><button type="button" data-close>Cancelar</button><button class="primary" type="submit">Dar de alta</button></div>
     </form>
   </dialog>
 
   <script src="/js/api.js"></script>
   <script src="/js/firma.js"></script>
+  <script src="/js/lector-etiquetas.js"></script>
+  <script src="/js/tablas.js"></script>
   <script src="/js/pages/equipo.js"></script>
 </body>
 </html>
