@@ -10,7 +10,7 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   dateStrings: true,
-  charset: 'utf8mb4',
+  charset: 'utf8mb4_unicode_ci', // misma collation que la BD (evita 'Illegal mix of collations')
 });
 
 /** Ejecuta una consulta preparada y devuelve las filas. */

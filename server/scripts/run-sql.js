@@ -15,6 +15,7 @@ const mysql = require('mysql2/promise');
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     multipleStatements: true,
+    charset: 'utf8mb4_unicode_ci',
   });
   await conn.query(sql);
   await conn.end();
