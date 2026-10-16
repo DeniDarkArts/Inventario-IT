@@ -17,7 +17,7 @@
     const k = [['Equipos', total], ['Libres ahora', d.libre || 0], ['Tras preparación', d.libre_tras_preparacion || 0],
       ['Asignados', e.asignado || 0], ['Incidencias abiertas', incid], ['Masters pendientes', r.masterizaciones_pendientes]];
     document.querySelector('#kpis').innerHTML = k.map(([t, n]) =>
-      `<div class="card"><div class="muted">${t}</div><div style="font-size:1.8rem;font-weight:700">${n}</div></div>`).join('');
+      `<div class="card"><div class="muted">${t}</div><div class="kpi-n">${n}</div></div>`).join('');
   }).catch(() => {});
 
   let timer;

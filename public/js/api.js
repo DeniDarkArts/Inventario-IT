@@ -46,7 +46,11 @@ function toast(msg, tipo = 'ok') {
   setTimeout(() => t.remove(), 3500);
 }
 
-/** Pinta la barra de navegación según el rol. */
+const ETIQUETA_ROL = {
+  admin_it: 'Administrador IT', tecnico_it: 'Técnico IT', lector: 'Lector', responsable: 'Responsable', empleado: 'Empleado',
+};
+
+/** Pinta la cabecera y el menú según el rol. */
 async function nav() {
   const u = await me();
   const links = veTodo(u)
@@ -54,12 +58,20 @@ async function nav() {
     : tieneRol(u, 'responsable')
       ? [['/disponibilidad.html', 'Disponibilidad'], ['/mis-equipos.html', 'Mis equipos'], ['/escanear.html', 'Escanear']]
       : [['/mis-equipos.html', 'Mis equipos'], ['/escanear.html', 'Escanear']];
+  const rol = ETIQUETA_ROL[u.roles[0]?.rol] || 'Empleado';
   document.querySelector('#nav').innerHTML = `
-    <a class="brand" href="/">Inventario IT</a>
-    ${links.map(([h, t]) => `<a href="${h}" ${location.pathname === h ? 'aria-current="page"' : ''}>${t}</a>`).join('')}
-    <span class="spacer"></span>
-    <span class="who">${esc(u.nombre)}</span>
-    <button class="link" id="salir">Salir</button>`;
+    <header>
+      <div class="sesion">
+        <button class="primary" id="salir">Salir</button>
+        <span class="who">${esc(u.email)}</span>
+        <span class="rol">(${esc(rol)})</span>
+      </div>
+      <a class="marca" href="/">
+        <img src="/icons/logo-ct.jpg" alt="CT Ingenieros">
+        <span>CT Ingenieros<small>Inventario IT</small></span>
+      </a>
+    </header>
+    <nav>${links.map(([h, t]) => `<a href="${h}" ${location.pathname === h ? 'aria-current="page"' : ''}>${t}</a>`).join('')}</nav>`;
   document.querySelector('#salir').onclick = async () => {
     await API.post('/auth/logout');
     // Borra datos de la API cacheados por la PWA para que otro usuario no los vea

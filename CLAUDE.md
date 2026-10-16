@@ -22,7 +22,7 @@ Inventario IT para una empresa de ingeniería (CT Ingenieros). Spec: `docs/espec
 
 ## Pendiente inmediato
 
-1. ~~Base de datos de usuarios~~ Hecho: login contra `ing039.users` (argon2id, por email o `WindowsUser`; `AUTH_DB_NAME` en `.env`). Cada login refleja el usuario en `usuarios`/`empleados` (`auth_origen='ing039'`, sin contraseña) y resincroniza el rol: Admin→`admin_it`, Project Manager→`responsable` de su BU, Reader→`lector` (ve todo, no modifica), FTE/sin rol→`empleado`. Ver `server/src/lib/usuarios-ing039.js`. Los usuarios sin contraseña en ing039 no pueden entrar.
+1. ~~Base de datos de usuarios~~ Hecho: login contra `ing039.users` (argon2id, por email o `WindowsUser`; `AUTH_DB_NAME` en `.env`). Cada login refleja el usuario en `usuarios`/`empleados` (`auth_origen='ing039'`, sin contraseña) y resincroniza BU (→ `unidades_negocio`), Site (→ oficina en `ubicaciones`) y rol: Admin→`admin_it`, Project Manager→`responsable` de su BU, Reader→`lector` (ve todo, no modifica), FTE/sin rol→`empleado`. Ver `server/src/lib/usuarios-ing039.js`. Los usuarios sin contraseña en ing039 no pueden entrar.
 2. Actas en PDF (PDFKit) para entrega y devolución.
 3. Pantallas: empleados (altas y bajas), masterización, incidencias, solicitudes, catálogos.
 4. Alertas diarias (`node-cron` + email).

@@ -66,6 +66,17 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 const PORT = Number(process.env.PORT || 3000);
 if (require.main === module) {
   app.listen(PORT, () => console.log(`Inventario IT escuchando en http://localhost:${PORT}`));
+
+  // HTTPS opcional (desarrollo): el móvil necesita HTTPS para la cámara y para que la CSP no rompa la página
+  if (process.env.HTTPS_CERT && process.env.HTTPS_KEY) {
+    const fs = require('fs');
+    const base = path.join(__dirname, '..');
+    const HTTPS_PORT = Number(process.env.HTTPS_PORT || 3443);
+    require('https').createServer({
+      cert: fs.readFileSync(path.resolve(base, process.env.HTTPS_CERT)),
+      key: fs.readFileSync(path.resolve(base, process.env.HTTPS_KEY)),
+    }, app).listen(HTTPS_PORT, () => console.log(`Inventario IT escuchando en https://<ip-del-equipo>:${HTTPS_PORT}`));
+  }
 }
 
 module.exports = app;

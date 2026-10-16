@@ -10,3 +10,4 @@ Thumbs.db
 
 # Volcados de BBDD con datos personales
 BBDD/
+server/certs/

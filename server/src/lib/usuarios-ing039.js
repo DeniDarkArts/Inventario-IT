@@ -16,7 +16,7 @@ const ROLES = {
 async function buscar(login) {
   if (!poolAuth) return null;
   const [rows] = await poolAuth.execute(
-    `SELECT Id, User, Password, Rol, Resid, Nombre, Apellidos, BU
+    `SELECT Id, User, Password, Rol, Resid, Nombre, Apellidos, BU, Site
        FROM users WHERE (LOWER(User) = ? OR LOWER(WindowsUser) = ?) AND Password <> '' LIMIT 2`,
     [login, login]);
   return rows.length === 1 ? rows[0] : null;
@@ -52,13 +52,26 @@ async function sincronizar(ext) {
       [[{ id: unId }]] = await conn.execute('SELECT id FROM unidades_negocio WHERE codigo = ?', [bu]);
     }
 
+    // Site → oficina del empleado (se guarda tal cual viene en ing039)
+    const site = String(ext.Site || '').trim();
+    let ubicacionId = null;
+    if (site) {
+      let [[ub]] = await conn.execute("SELECT id FROM ubicaciones WHERE tipo = 'oficina' AND nombre = ?", [site]);
+      if (!ub) {
+        const [r] = await conn.execute("INSERT INTO ubicaciones (tipo, nombre) VALUES ('oficina', ?)", [site]);
+        ub = { id: r.insertId };
+      }
+      ubicacionId = ub.id;
+    }
+
     let empleadoId = u.empleado_id;
     if (resid && unId) {
       await conn.execute(
-        `INSERT INTO empleados (num_empleado, nombre, apellidos, email, un_id, estado, fecha_alta)
-         VALUES (?, ?, ?, ?, ?, 'activo', CURDATE())
-         ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), apellidos = VALUES(apellidos), un_id = VALUES(un_id)`,
-        [resid, ext.Nombre, ext.Apellidos, u.email, unId]);
+        `INSERT INTO empleados (num_empleado, nombre, apellidos, email, un_id, ubicacion_id, estado, fecha_alta)
+         VALUES (?, ?, ?, ?, ?, ?, 'activo', CURDATE())
+         ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), apellidos = VALUES(apellidos), un_id = VALUES(un_id),
+                                 ubicacion_id = VALUES(ubicacion_id)`,
+        [resid, ext.Nombre, ext.Apellidos, u.email, unId, ubicacionId]);
       // Si el Resid ya pertenece a otro email, el upsert no crea fila para este: queda sin empleado
       const [[emp]] = await conn.execute('SELECT id FROM empleados WHERE email = ?', [u.email]);
       empleadoId = emp?.id ?? null;
