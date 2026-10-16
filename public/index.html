@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventario · Inventario IT</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1f5fbf">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Inventario</h1>
+    <section class="grid" id="kpis"></section>
+    <div class="filters">
+      <input id="q" type="search" placeholder="QR, nº serie, hostname o persona" style="flex:1; min-width:220px">
+      <select id="estado"><option value="">Todos los estados</option></select>
+      <select id="tipo"><option value="">Todos los tipos</option></select>
+      <select id="un"><option value="">Todas las UN</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Código</th><th>Tipo</th><th>Modelo</th><th>Estado</th><th>Asignado a</th><th class="hide-mobile">Proyecto</th><th class="hide-mobile">Ubicación</th></tr></thead>
+        <tbody id="filas"><tr><td colspan="7" class="muted">Cargando…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="muted" id="total"></p>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/pages/inventario.js"></script>
+</body>
+</html>

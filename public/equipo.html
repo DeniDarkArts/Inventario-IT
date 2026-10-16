@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equipo · Inventario IT</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1f5fbf">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main style="max-width:820px">
+    <div id="contenido"><p class="muted">Cargando…</p></div>
+  </main>
+
+  <!-- Asignar -->
+  <dialog id="dlg-asignar">
+    <form id="f-asignar">
+      <h2>Asignar equipo</h2>
+      <label for="a-empleado">Empleado</label>
+      <select id="a-empleado" required></select>
+      <label for="a-proyecto">Proyecto</label>
+      <select id="a-proyecto"></select>
+      <label for="a-ubicacion">Ubicación</label>
+      <select id="a-ubicacion"></select>
+      <label for="a-tipo">Tipo</label>
+      <select id="a-tipo"><option value="personal">Personal</option><option value="prestamo">Préstamo</option><option value="puesto">Puesto fijo (sin persona)</option></select>
+      <label for="a-fin">Fecha fin prevista (préstamos)</label>
+      <input id="a-fin" type="date">
+      <label>Firma del empleado</label>
+      <canvas class="firma" id="a-firma"></canvas>
+      <div class="actions"><button type="button" data-close>Cancelar</button><button type="button" id="a-borrar">Borrar firma</button><button class="primary" type="submit">Asignar</button></div>
+    </form>
+  </dialog>
+
+  <!-- Devolver -->
+  <dialog id="dlg-devolver">
+    <form id="f-devolver">
+      <h2>Devolución</h2>
+      <label for="d-estado">Estado del equipo</label>
+      <select id="d-estado"><option value="correcto">Correcto</option><option value="con_danos">Con daños</option><option value="falta_accesorio">Falta accesorio</option></select>
+      <label for="d-notas">Notas</label>
+      <textarea id="d-notas" rows="2"></textarea>
+      <label>Firma del empleado</label>
+      <canvas class="firma" id="d-firma"></canvas>
+      <div class="actions"><button type="button" data-close>Cancelar</button><button class="primary" type="submit">Registrar devolución</button></div>
+    </form>
+  </dialog>
+
+  <!-- Incidencia -->
+  <dialog id="dlg-incidencia">
+    <form id="f-incidencia">
+      <h2>Reportar incidencia</h2>
+      <label for="i-categoria">Qué pasa</label>
+      <select id="i-categoria" required>
+        <option value="teclado">Teclado (teclas que fallan…)</option><option value="pantalla">Pantalla</option>
+        <option value="bateria">Batería / carga</option><option value="software">Software</option>
+        <option value="dano_fisico">Daño físico</option><option value="perdida_robo">Pérdida o robo</option><option value="otro">Otro</option>
+      </select>
+      <label for="i-desc">Descripción</label>
+      <textarea id="i-desc" rows="3" required></textarea>
+      <label for="i-fotos">Fotos (opcional, máx. 5)</label>
+      <input id="i-fotos" type="file" accept="image/*" capture="environment" multiple>
+      <div class="actions"><button type="button" data-close>Cancelar</button><button class="primary" type="submit">Enviar</button></div>
+    </form>
+  </dialog>
+
+  <!-- Alta de equipo nuevo -->
+  <dialog id="dlg-alta">
+    <form id="f-alta">
+      <h2>Alta de equipo</h2>
+      <p class="muted">Código QR: <strong id="n-qr"></strong></p>
+      <label for="n-tipo">Tipo</label><select id="n-tipo" required></select>
+      <label for="n-modelo">Modelo</label><select id="n-modelo"><option value="">—</option></select>
+      <label for="n-serie">Nº de serie</label><input id="n-serie">
+      <label for="n-un">Unidad de negocio principal</label><select id="n-un" required></select>
+      <label for="n-compra">Fecha de compra</label><input id="n-compra" type="date">
+      <label for="n-garantia">Garantía hasta</label><input id="n-garantia" type="date">
+      <label for="n-proveedor">Proveedor</label><input id="n-proveedor">
+      <div class="actions"><button type="button" data-close>Cancelar</button><button class="primary" type="submit">Dar de alta</button></div>
+    </form>
+  </dialog>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/firma.js"></script>
+  <script src="/js/pages/equipo.js"></script>
+</body>
+</html>

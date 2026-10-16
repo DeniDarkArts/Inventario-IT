@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Disponibilidad · Inventario IT</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1f5fbf">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Disponibilidad</h1>
+    <div class="filters">
+      <select id="tipo"><option value="">Todos los tipos</option></select>
+      <select id="un"><option value="">Todas las UN</option></select>
+      <select id="ram"><option value="">Cualquier RAM</option><option value="16">16 GB o más</option><option value="32">32 GB o más</option></select>
+    </div>
+    <div id="grupos"></div>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/pages/disponibilidad.js"></script>
+</body>
+</html>

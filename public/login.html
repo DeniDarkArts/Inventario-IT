@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar · Inventario IT</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1f5fbf">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <main style="max-width:380px; padding-top:12vh">
+    <div class="card">
+      <h1>Inventario IT</h1>
+      <form id="f">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username" required>
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <div class="actions"><button class="primary" type="submit">Entrar</button></div>
+        <p id="err" class="muted" role="alert"></p>
+      </form>
+    </div>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/pages/login.js"></script>
+</body>
+</html>

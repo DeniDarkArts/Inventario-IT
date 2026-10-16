@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escanear · Inventario IT</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#1f5fbf">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main style="max-width:520px">
+    <h1>Escanear QR</h1>
+    <div class="scanner" id="scanner">
+      <video id="video" playsinline muted></video>
+      <div class="frame"></div>
+    </div>
+    <div id="fallback" hidden></div>
+    <p class="muted" id="estado">Apunta la cámara a la pegatina QR del equipo.</p>
+    <form id="manual" class="card">
+      <label for="codigo">O escribe el código (por ejemplo CT-000123 o TEC-000045)</label>
+      <input id="codigo" autocomplete="off" required>
+      <div class="actions"><button class="primary" type="submit">Buscar</button></div>
+    </form>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/pages/escanear.js"></script>
+</body>
+</html>

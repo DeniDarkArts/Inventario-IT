@@ -1,0 +1,73 @@
+:root {
+  --bg: #f6f7f9; --surface: #fff; --text: #1d2330; --muted: #5d6676; --line: #dfe3ea;
+  --accent: #1f5fbf; --accent-ink: #fff; --ok: #1e7d4f; --warn: #a86200; --bad: #b3261e;
+  --radius: 10px; --gap: 16px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text); background: var(--bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #14171c; --surface: #1d2129; --text: #e7eaf0; --muted: #9aa3b2; --line: #2e3440; --accent: #6ea2ff; --accent-ink: #0b1220; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+main { max-width: 1200px; margin: 0 auto; padding: var(--gap); }
+h1 { font-size: 1.4rem; margin: 8px 0 16px; }
+h2 { font-size: 1.1rem; margin: 24px 0 8px; }
+
+#nav { display: flex; gap: 16px; align-items: center; padding: 10px 16px; background: var(--surface);
+  border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; flex-wrap: wrap; }
+#nav a { color: var(--muted); text-decoration: none; }
+#nav a[aria-current] { color: var(--text); font-weight: 600; }
+#nav .brand { color: var(--text); font-weight: 700; }
+#nav .spacer { flex: 1; }
+#nav .who { color: var(--muted); font-size: .9rem; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--gap); margin-bottom: var(--gap); }
+.grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+input, select, textarea, button { font: inherit; }
+input, select, textarea { padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); min-width: 0; }
+label { display: block; font-size: .85rem; color: var(--muted); margin: 10px 0 4px; }
+label + input, label + select, label + textarea { width: 100%; }
+button, .btn { padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; text-decoration: none; display: inline-block; }
+button.primary, .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.danger { color: var(--bad); border-color: var(--bad); }
+button.link { border: 0; background: none; color: var(--accent); padding: 0; }
+button:disabled { opacity: .5; cursor: default; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--line); font-size: .92rem; }
+th { color: var(--muted); font-weight: 600; background: var(--bg); }
+tr[data-href] { cursor: pointer; }
+tr[data-href]:hover td { background: var(--bg); }
+.table-wrap { overflow-x: auto; }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .8rem; border: 1px solid currentColor; white-space: nowrap; }
+.b-en_stock { color: var(--ok); } .b-asignado { color: var(--accent); }
+.b-reservado, .b-pendiente_master, .b-en_revision { color: var(--warn); }
+.b-en_reparacion, .b-perdido, .b-baja_definitiva { color: var(--bad); }
+.muted { color: var(--muted); }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+dl.kv dt { color: var(--muted); }
+
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 18px; border-radius: 8px; background: var(--text); color: var(--bg); z-index: 50; }
+.toast-error { background: var(--bad); color: #fff; }
+
+/* Escáner */
+.scanner { position: relative; background: #000; border-radius: var(--radius); overflow: hidden; aspect-ratio: 3 / 4; max-height: 70vh; margin: 0 auto; }
+.scanner video { width: 100%; height: 100%; object-fit: cover; }
+.scanner .frame { position: absolute; inset: 20%; border: 3px solid rgba(255,255,255,.85); border-radius: 12px; }
+
+/* Firma */
+canvas.firma { width: 100%; height: 180px; border: 1px dashed var(--line); border-radius: 8px; background: #fff; touch-action: none; }
+
+dialog { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--text); width: min(520px, 94vw); padding: var(--gap); }
+dialog::backdrop { background: rgba(0,0,0,.4); }
+
+@media (max-width: 640px) {
+  main { padding: 12px; }
+  .hide-mobile { display: none; }
+  button, .btn { padding: 12px 16px; }
+}
