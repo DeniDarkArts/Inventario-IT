@@ -75,7 +75,7 @@ router.patch('/:id(\\d+)', requireRol(...IT), ah(async (req, res) => {
 
 router.get('/:id(\\d+)/equipos', ah(async (req, res) => {
   const user = req.session.user;
-  if (!esIT(user) && Number(req.params.id) !== user.empleado_id && !ambito(user).unIds?.length) {
+  if (!ambito(user).todo && Number(req.params.id) !== user.empleado_id && !ambito(user).unIds?.length) {
     return res.status(403).json({ error: 'Sin permiso' });
   }
   const items = await query(

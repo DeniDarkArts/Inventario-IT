@@ -17,14 +17,12 @@ Inventario IT para una empresa de ingeniería (CT Ingenieros). Spec: `docs/espec
 ## Entorno
 
 - Desarrollo en el ordenador de Deni (Windows + XAMPP). Más adelante se moverá a una máquina virtual.
-- Nada se ha ejecutado todavía contra MySQL real: el esquema y el servidor se escribieron sin poder instalar dependencias. **Primer paso**: `npm install`, `npm run db:schema`, `npm run db:seed`, `npm run crear-admin`, `npm run dev`, y corregir lo que falle.
+- Montado y probado en local con MariaDB 10.4 de XAMPP (BD `inventario_it`). Arranque: `.claude/launch.json` o `npm --prefix server run dev`.
+- Usuarios: se leen de la BD corporativa `ing039` (volcado en `BBDD/`, fuera de git; importar con `mysql -uroot ing039 < BBDD/ING039_*.sql`). Nunca se escribe en ella; todo lo demás va en `inventario_it`.
 
 ## Pendiente inmediato
 
-1. **Base de datos de usuarios existente**: ya existe una BD con una tabla de usuarios. Deni pasará los datos (servidor, nombre de BD, tabla, columnas, cómo guarda las contraseñas). Hay que decidir si:
-   - la app autentica contra esa tabla (adaptar `server/src/routes/auth.js` y, si es otra BD, un segundo pool en `db.js`), o
-   - se sincronizan/importan esos usuarios a `usuarios` + `empleados`.
-   El resto del código solo depende de `req.session.user = { id, empleado_id, email, roles: [{rol, un_id, proyecto_id}] }`; mantener ese contrato.
+1. ~~Base de datos de usuarios~~ Hecho: login contra `ing039.users` (argon2id, por email o `WindowsUser`; `AUTH_DB_NAME` en `.env`). Cada login refleja el usuario en `usuarios`/`empleados` (`auth_origen='ing039'`, sin contraseña) y resincroniza el rol: Admin→`admin_it`, Project Manager→`responsable` de su BU, Reader→`lector` (ve todo, no modifica), FTE/sin rol→`empleado`. Ver `server/src/lib/usuarios-ing039.js`. Los usuarios sin contraseña en ing039 no pueden entrar.
 2. Actas en PDF (PDFKit) para entrega y devolución.
 3. Pantallas: empleados (altas y bajas), masterización, incidencias, solicitudes, catálogos.
 4. Alertas diarias (`node-cron` + email).

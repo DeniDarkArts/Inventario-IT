@@ -106,8 +106,8 @@ CREATE TABLE usuarios (
   id                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   empleado_id        INT UNSIGNED NULL,
   email              VARCHAR(160) NOT NULL UNIQUE,
-  password_hash      VARCHAR(100) NULL,             -- NULL si auth_origen = 'entra'
-  auth_origen        ENUM('local','entra') NOT NULL DEFAULT 'local',
+  password_hash      VARCHAR(100) NULL,             -- NULL si auth_origen <> 'local'
+  auth_origen        ENUM('local','entra','ing039') NOT NULL DEFAULT 'local',  -- ing039: BD de usuarios corporativa
   entra_oid          VARCHAR(64) NULL UNIQUE,
   activo             TINYINT(1) NOT NULL DEFAULT 1,
   intentos_fallidos  TINYINT UNSIGNED NOT NULL DEFAULT 0,
@@ -119,7 +119,7 @@ CREATE TABLE usuarios (
 CREATE TABLE usuario_roles (
   id           INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   usuario_id   INT UNSIGNED NOT NULL,
-  rol          ENUM('admin_it','tecnico_it','responsable','empleado') NOT NULL,
+  rol          ENUM('admin_it','tecnico_it','lector','responsable','empleado') NOT NULL,  -- lector: ve todo, no modifica
   un_id        INT UNSIGNED NULL,                   -- ámbito del responsable
   proyecto_id  INT UNSIGNED NULL,
   CONSTRAINT fk_rol_usr  FOREIGN KEY (usuario_id)  REFERENCES usuarios(id) ON DELETE CASCADE,

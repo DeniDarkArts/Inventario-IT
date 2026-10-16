@@ -4,7 +4,7 @@ const { query } = require('../db');
 const { ah } = require('../lib/http');
 const { requireRol } = require('../middleware/auth');
 
-router.get('/resumen', requireRol('admin_it', 'tecnico_it'), ah(async (req, res) => {
+router.get('/resumen', requireRol('admin_it', 'tecnico_it', 'lector'), ah(async (req, res) => {
   const [porEstado, disponibilidad, altas, bajas, incidencias, masters] = await Promise.all([
     query('SELECT estado, COUNT(*) AS n FROM equipos GROUP BY estado'),
     query('SELECT disponibilidad, COUNT(*) AS n FROM v_equipos_disponibilidad GROUP BY disponibilidad'),

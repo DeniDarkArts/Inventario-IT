@@ -2,12 +2,12 @@
 const router = require('express').Router();
 const { query } = require('../db');
 const { ah } = require('../lib/http');
-const { esIT, ambito } = require('../middleware/auth');
+const { ambito } = require('../middleware/auth');
 
 router.get('/', ah(async (req, res) => {
   const user = req.session.user;
   const amb = ambito(user);
-  if (!esIT(user) && !amb.unIds?.length) return res.status(403).json({ error: 'Sin permiso' });
+  if (!amb.todo && !amb.unIds?.length) return res.status(403).json({ error: 'Sin permiso' });
 
   const where = ["v.disponibilidad <> 'no_disponible'"]; const params = [];
   if (req.query.tipo) { where.push('v.tipo = ?'); params.push(req.query.tipo); }

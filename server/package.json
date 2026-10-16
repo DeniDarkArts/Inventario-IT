@@ -12,6 +12,7 @@
     "crear-admin": "node scripts/crear-admin.js"
   },
   "dependencies": {
+    "argon2": "^0.45.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",

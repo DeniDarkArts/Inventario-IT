@@ -25,6 +25,7 @@ async function me() {
 }
 const tieneRol = (u, ...roles) => u.roles.some((r) => roles.includes(r.rol));
 const esIT = (u) => tieneRol(u, 'admin_it', 'tecnico_it');
+const veTodo = (u) => esIT(u) || tieneRol(u, 'lector');
 
 /** Escapa texto para insertarlo en HTML. */
 function esc(s) {
@@ -48,9 +49,11 @@ function toast(msg, tipo = 'ok') {
 /** Pinta la barra de navegación según el rol. */
 async function nav() {
   const u = await me();
-  const links = esIT(u)
+  const links = veTodo(u)
     ? [['/', 'Inventario'], ['/disponibilidad.html', 'Disponibilidad'], ['/escanear.html', 'Escanear'], ['/mis-equipos.html', 'Mis equipos']]
-    : [['/mis-equipos.html', 'Mis equipos'], ['/escanear.html', 'Escanear']];
+    : tieneRol(u, 'responsable')
+      ? [['/disponibilidad.html', 'Disponibilidad'], ['/mis-equipos.html', 'Mis equipos'], ['/escanear.html', 'Escanear']]
+      : [['/mis-equipos.html', 'Mis equipos'], ['/escanear.html', 'Escanear']];
   document.querySelector('#nav').innerHTML = `
     <a class="brand" href="/">Inventario IT</a>
     ${links.map(([h, t]) => `<a href="${h}" ${location.pathname === h ? 'aria-current="page"' : ''}>${t}</a>`).join('')}

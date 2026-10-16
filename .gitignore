@@ -7,3 +7,6 @@ uploads/*
 Thumbs.db
 .vscode/
 .idea/
+
+# Volcados de BBDD con datos personales
+BBDD/

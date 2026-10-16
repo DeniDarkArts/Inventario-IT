@@ -6,7 +6,7 @@ const multer = require('multer');
 const { query, transaction } = require('../db');
 const { ah, HttpError } = require('../lib/http');
 const { auditar } = require('../lib/auditoria');
-const { requireRol, esIT } = require('../middleware/auth');
+const { requireRol, esIT, veTodo } = require('../middleware/auth');
 
 const IT = ['admin_it', 'tecnico_it'];
 const UPLOAD_DIR = path.resolve(__dirname, '../..', process.env.UPLOAD_DIR || '../uploads', 'incidencias');
@@ -24,7 +24,7 @@ const upload = multer({
 router.get('/', ah(async (req, res) => {
   const user = req.session.user;
   const where = ['1=1']; const params = [];
-  if (!esIT(user)) { where.push('i.reportada_por = ?'); params.push(user.id); }
+  if (!veTodo(user)) { where.push('i.reportada_por = ?'); params.push(user.id); }
   if (req.query.estado) { where.push('i.estado = ?'); params.push(req.query.estado); }
   if (req.query.abiertas) where.push("i.estado IN ('abierta','en_curso','en_reparacion')");
   const items = await query(

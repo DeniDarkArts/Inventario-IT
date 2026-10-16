@@ -1,6 +1,6 @@
 (async () => {
   const u = await nav();
-  if (!esIT(u)) { location.href = '/mis-equipos.html'; return; }
+  if (!veTodo(u)) { location.href = '/mis-equipos.html'; return; }
 
   // Filtros
   const estado = document.querySelector('#estado');

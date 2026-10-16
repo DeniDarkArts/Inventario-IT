@@ -13,6 +13,17 @@ const pool = mysql.createPool({
   charset: 'utf8mb4_unicode_ci', // misma collation que la BD (evita 'Illegal mix of collations')
 });
 
+// BD corporativa de usuarios (ing039) para autenticar. Opcional: sin AUTH_DB_NAME solo hay login local.
+const poolAuth = process.env.AUTH_DB_NAME ? mysql.createPool({
+  host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
+  port: Number(process.env.AUTH_DB_PORT || process.env.DB_PORT || 3306),
+  user: process.env.AUTH_DB_USER || process.env.DB_USER || 'root',
+  password: process.env.AUTH_DB_PASSWORD ?? process.env.DB_PASSWORD ?? '',
+  database: process.env.AUTH_DB_NAME,
+  connectionLimit: 3,
+  charset: 'utf8mb4_general_ci',
+}) : null;
+
 /** Ejecuta una consulta preparada y devuelve las filas. */
 async function query(sql, params = []) {
   const [rows] = await pool.execute(sql, params);
@@ -35,4 +46,4 @@ async function transaction(fn) {
   }
 }
 
-module.exports = { pool, query, transaction };
+module.exports = { pool, poolAuth, query, transaction };

@@ -1,7 +1,8 @@
-// /api/auth — login local con bcrypt y sesión en cookie
+// /api/auth — login contra la BD corporativa (ing039, argon2id) o local (bcrypt); sesión en cookie
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { query } = require('../db');
+const { query, transaction } = require('../db');
+const ing039 = require('../lib/usuarios-ing039');
 const { ah } = require('../lib/http');
 const { requireAuth } = require('../middleware/auth');
 
@@ -12,17 +13,21 @@ router.post('/login', ah(async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: 'Email y contraseña obligatorios' });
 
-  const [u] = await query(
+  const login = String(email).trim().toLowerCase();
+  let [u] = await query(
     `SELECT id, empleado_id, email, password_hash, activo, intentos_fallidos, bloqueado_hasta
        FROM usuarios WHERE email = ? AND auth_origen = 'local'`,
-    [email.trim().toLowerCase()]
+    [login]
   );
+  // Si no es un usuario local, se busca en la BD corporativa
+  const ext = u ? null : await ing039.buscar(login);
+  if (ext) u = await transaction((conn) => ing039.reflejarUsuario(conn, ext));
   if (!u || !u.activo) return res.status(401).json({ error: 'Credenciales incorrectas' });
   if (u.bloqueado_hasta && new Date(u.bloqueado_hasta) > new Date()) {
     return res.status(423).json({ error: 'Cuenta bloqueada temporalmente. Inténtalo más tarde.' });
   }
 
-  const ok = await bcrypt.compare(password, u.password_hash || '');
+  const ok = ext ? await ing039.verificar(ext, password) : await bcrypt.compare(password, u.password_hash || '');
   if (!ok) {
     const intentos = u.intentos_fallidos + 1;
     await query(
@@ -34,6 +39,7 @@ router.post('/login', ah(async (req, res) => {
     return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
 
+  if (ext) u = await ing039.sincronizar(ext);
   await query(
     'UPDATE usuarios SET intentos_fallidos = 0, bloqueado_hasta = NULL, ultimo_acceso = NOW() WHERE id = ?',
     [u.id]

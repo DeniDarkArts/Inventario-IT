@@ -4,7 +4,7 @@ const { query, transaction } = require('../db');
 const { ah, HttpError, paginacion } = require('../lib/http');
 const { auditar } = require('../lib/auditoria');
 const { validarTransicion, ESTADOS } = require('../lib/estados');
-const { requireRol, esIT, ambito } = require('../middleware/auth');
+const { requireRol, esIT, veTodo, ambito } = require('../middleware/auth');
 
 const IT = ['admin_it', 'tecnico_it'];
 
@@ -78,7 +78,7 @@ router.get('/qr/:codigo', ah(async (req, res) => {
   if (!equipo) return res.status(404).json({ error: 'Equipo no registrado', codigo, puede_dar_alta: esIT(req.session.user) });
 
   // Empleados y responsables solo ven equipos de su ámbito
-  if (!esIT(req.session.user)) {
+  if (!veTodo(req.session.user)) {
     const w = ['e.id = ?']; const p = [equipo.id];
     filtroAmbito(req.session.user, w, p);
     const [visible] = await query(`${SELECT_EQUIPO} WHERE ${w.join(' AND ')}`, p);

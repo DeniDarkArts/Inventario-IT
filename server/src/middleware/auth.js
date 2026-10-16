@@ -22,14 +22,19 @@ function esIT(user) {
   return user.roles.some((r) => r.rol === 'admin_it' || r.rol === 'tecnico_it');
 }
 
+/** IT o lector: ve todo el inventario (el lector no puede modificar). */
+function veTodo(user) {
+  return esIT(user) || user.roles.some((r) => r.rol === 'lector');
+}
+
 /**
  * Devuelve el ámbito visible del usuario para filtrar consultas:
- *  - { todo: true }                       IT
+ *  - { todo: true }                       IT o lector
  *  - { unIds: [...], proyectoIds: [...] } responsable
  *  - { empleadoId }                       empleado
  */
 function ambito(user) {
-  if (esIT(user)) return { todo: true };
+  if (veTodo(user)) return { todo: true };
   const resp = user.roles.filter((r) => r.rol === 'responsable');
   if (resp.length) {
     return {
@@ -41,4 +46,4 @@ function ambito(user) {
   return { empleadoId: user.empleado_id };
 }
 
-module.exports = { requireAuth, requireRol, esIT, ambito };
+module.exports = { requireAuth, requireRol, esIT, veTodo, ambito };
