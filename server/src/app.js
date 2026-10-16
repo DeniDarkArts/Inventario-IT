@@ -15,9 +15,13 @@ const PROD = process.env.NODE_ENV === 'production';
 const PUBLIC_DIR = path.join(__dirname, '..', '..', 'public');
 
 app.set('trust proxy', 1); // detrás de un proxy HTTPS en producción
+// Servida por HTTP en la red interna: sin upgrade-insecure-requests ni HSTS, o el navegador pide CSS/JS por HTTPS y fallan
+const SOLO_HTTPS = (process.env.PUBLIC_URL || '').startsWith('https://');
 app.use(helmet({
+  strictTransportSecurity: SOLO_HTTPS,
   contentSecurityPolicy: {
     directives: {
+      upgradeInsecureRequests: SOLO_HTTPS ? [] : null,
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", 'https://unpkg.com', "'wasm-unsafe-eval'"], // html5-qrcode (respaldo) y WASM del lector de etiquetas
       workerSrc: ["'self'", 'blob:'],                                     // OCR (tesseract) en un worker
